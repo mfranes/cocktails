@@ -44,3 +44,22 @@ app.get('/cocktails', async (req, res) => {
         res.status(400).json(error);
     }
 });
+
+// buscar un cocktail por id
+app.get('/cocktails/:id', async (req, res) => {
+    try {
+        //const id  = req.params.id;
+        const { id } = req.params;
+        const conn = await getConnection();
+        const select = 'select * from cocktails where id = ?';
+        const [result] = await conn.query(select, [id]); // id lo obtuve del req.params
+
+        if (result.length === 0) {
+            res.status(400).json({ message: 'El id no existe en la BD' });
+        } else {
+            res.status(200).json(result[0]);
+        }
+    } catch (error) {
+        res.status(400).json(error);
+    }
+});
