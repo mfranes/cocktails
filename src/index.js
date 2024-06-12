@@ -63,3 +63,24 @@ app.get('/cocktails/:id', async (req, res) => {
         res.status(400).json(error);
     }
 });
+
+//añadir un nuevo cocktail
+app.post('/cocktails', async (req, res) => {
+    const conn = await getConnection();
+    const { nombre, ingredientes, autor, precio } = req.body;
+
+    const sqlInsert =
+        'insert into cocktails (nombre, ingredientes, autor, precio) values(?,?,?,?)';
+    const [nuevoCocktail] = await conn.query(sqlInsert, [
+        nombre,
+        ingredientes,
+        autor,
+        precio
+    ]);
+    res.status(200).json({
+        success: true,
+        id: nuevoCocktail.insertId, // id que generó MySQL para la nueva fila
+    });
+
+    await conn.end();
+});
