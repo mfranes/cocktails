@@ -106,3 +106,18 @@ app.put('/cocktails/:id', async (req, res) => {
     }
     console.log(result);
 });
+
+
+//delete un cocktail por id
+app.delete('/cocktails/:id', async (req, res) => {
+    const conn = await getConnection();
+    const idCocktail = req.params.id;
+    const deleteSql = 'delete from cocktails WHERE id = ?';
+    const [result] = await conn.query(deleteSql, [idCocktail]);
+    if (result.affectedRows > 0) {
+        res.status(200).json({ success: true });
+    } else {
+        res.status(200).json({ success: false, message: 'No existe el id ' });
+    }
+    console.log(result);
+});
