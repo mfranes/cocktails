@@ -84,3 +84,25 @@ app.post('/cocktails', async (req, res) => {
 
     await conn.end();
 });
+
+//modificar un coktail por id
+app.put('/cocktails/:id', async (req, res) => {
+    const conn = await getConnection();
+    const idCocktail = req.params.id;
+    const nuevaData = req.body;
+    const modificarSql =
+        'UPDATE cocktails SET nombre=?, ingredientes=?, autor=?, precio=? WHERE id = ?';
+    const [result] = await conn.query(modificarSql, [
+        nuevaData.nombre,
+        nuevaData.ingredientes,
+        nuevaData.autor,
+        nuevaData.precio,
+        idCocktail,
+    ]);
+    if (result.affectedRows > 0) {
+        res.status(200).json({ success: true });
+    } else {
+        res.status(200).json({ success: false, message: 'No existe el id ' });
+    }
+    console.log(result);
+});
