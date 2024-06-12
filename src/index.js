@@ -28,12 +28,23 @@ async function getConnection() {
     return conex;
 }
 
-// endpoint que busca todas los cocktails
+// endpoint que busca cocktails
 app.get('/cocktails', async (req, res) => {
     try {
         const conn = await getConnection();
-        const select = 'SELECT * FROM cocktails';
-        const [result] = await conn.query(select);
+
+        const nombreFilterParams = req.query.nombre;
+        console.log(nombreFilterParams);
+
+        let selectCocktails = 'SELECT * FROM cocktails';
+
+        // Si nombreFilterParams esta definido, modifica la query
+        if (nombreFilterParams) {
+            selectCocktails += ' WHERE nombre like ?';
+        }
+
+        console.log(selectCocktails);
+        const [result] = await conn.query(selectCocktails, ['%' + nombreFilterParams + '%']);
 
         res.status(200).json({
             info: { count: result.length }, // número de elementos
