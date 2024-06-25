@@ -1,4 +1,4 @@
-## Módulo 4: Ejercicio de evaluación final: Cocktails API
+Cocktails API
 
 ### 1. Descripción del proyecto
 
